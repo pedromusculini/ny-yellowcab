@@ -1,33 +1,146 @@
-# ny-yellowcab
- Production-grade data curation and analytics for NYC Yellow Taxi trips, with reproducible pipelines, validated metrics, and a ready-to-open Power BI report.
-NYC Yellow Taxi Analytics — Curated Pipeline, Aggregations, and Power BI
+# NYC Yellow Taxi — Production Data Pipeline & Power BI
 
-This project delivers a professional, reproducible data pipeline for NYC Yellow Taxi trips, turning large, messy CSVs into clean, analysis-ready datasets with validated metrics and a polished Power BI report. It’s designed to showcase end‑to‑end capability across data engineering and analytics, with transparent rules, automation, and documentation suitable for international audiences.
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)
+[![Kaggle Notebook](https://img.shields.io/badge/Kaggle-Notebook-20BEFF?logo=kaggle&logoColor=white)](https://www.kaggle.com/code/pedromusculini/pedromusculini-nyc-taxi)
 
-What’s included
+Turn raw NYC Yellow Taxi trip data into curated, validated analytics with reproducible Python pipelines and a polished Power BI report. This repository is engineered for real‑world workflows: quality rules, automated aggregations, tests, CI, and clear documentation.
 
-Reproducible curation: Chunked processing, strict quality rules (NYC geo-bounds, distance range, <= 12h duration, fare cap), and standardized temporal features.
-Aggregated analytics: Hourly trips, monthly revenue, weekday patterns, and distance buckets exported as CSVs under docs/.
-Validation and tests: Rule checks + pytest ensure quality and prevent regressions; CI workflow keeps contributions safe.
-Geospatial and visuals: Folium map and Plotly exports for quick storytelling.
-Power BI report: Ready-to-open file with DAX measures and generated dimension tables (Date, Hour, Weekday, Distance Bucket).
-Developer UX: Makefile shortcuts, pre-commit hooks, EditorConfig, MIT license, and CONTRIBUTING guide for smooth collaboration.
-Cloud exploration: Optional Kaggle notebook for scalable analysis in a hosted environment.
-Key artifacts
+![Power BI Overview](powerbi/printpowerbi.png)
 
-Power BI: ny-yellowcab.pbix and dax_measures.txt
-Aggregates: docs/hourly_trips.csv, docs/monthly_revenue.csv, expensive_routes.csv
-Dimensions: data/dim/dim_date.csv, dim_hour.csv, dim_weekday.csv, dim_distance_bucket.csv
-Pipeline scripts: scripts/clean_curate.py, scripts/aggregate_metrics.py, scripts/split_dataset.py, scripts/validate_curated.py, export_powerbi_dims.py
-Visuals: docs/nyc_pickup_map.html, plotly_histogram.html
-Highlights
+— a ready‑to‑open report showcasing trips, revenue, and temporal patterns.
 
-Clean, validated, and explainable data pipeline
-Ready-to-use Power BI dashboard with robust DAX patterns
-CI-backed, contribution-friendly repository (tests, hooks, standards)
-Clear documentation and reproducible steps for recruiters and collaborators
-Who is this for
+## Quick Links
 
-Data analysts and data engineers who want a credible, production‑style portfolio asset
-Recruiters and stakeholders reviewing analytics fluency end‑to‑end
-Anyone exploring curated, large-scale mobility data with a focused business narrative
+- Kaggle Notebook: [View on Kaggle](https://www.kaggle.com/code/pedromusculini/pedromusculini-nyc-taxi)
+	- Local copy: `notebooks/pedromusculini-nyc-taxi.ipynb`
+- Power BI report: `powerbi/ny-yellowcab.pbix`
+- DAX snippets: `powerbi/dax_measures.txt`
+- Curated analytics (CSVs): `docs/`
+- Dimension tables (for BI): `data/dim/`
+
+## Highlights
+
+- Reproducible curation with strict, explainable rules
+- Aggregated analytics ready for stakeholders: hourly trips, monthly revenue, weekday patterns, distance buckets
+- Power BI model with curated dimensions and robust DAX measures
+- CI, tests, pre-commit, and EditorConfig for safe, consistent collaboration
+- Works locally and in the cloud (Kaggle) with environment guidance
+
+## What We Built (End‑to‑End)
+
+1) Data Curation (Python)
+- Column normalization, timezone-aware datetimes, feature derivation (date/hour/weekday)
+- Quality filters: NYC geo-bounds, trip distance range, trip duration <= 12h, and fare <= 1000
+- Efficient chunked processing for large CSVs
+
+2) Aggregations & Exports
+- Hourly trips, monthly revenue, top expensive routes
+- Saved as CSVs under `docs/` for easy consumption
+
+3) Validation & Tests
+- Rule checks and sanity assertions to guard data quality
+- `pytest` tests + GitHub Actions CI
+
+4) Power BI Ready
+- Prebuilt PBIX report: `powerbi/ny-yellowcab.pbix`
+- Generated dimension tables: `data/dim/dim_date.csv`, `dim_hour.csv`, `dim_weekday.csv`, `dim_distance_bucket.csv`
+- DAX measures following clear modeling patterns (see `powerbi/dax_measures.txt`)
+
+5) Cloud Exploration (Kaggle)
+- Optional hosted notebook for scalable runs and quick sharing
+- Notes on environment differences (e.g., Plotly/Kaleido) included in the notebook
+
+## Repository Structure (Key Paths)
+
+- `scripts/`
+	- `clean_curate.py` — applies rules and produces curated outputs
+	- `aggregate_metrics.py` — computes hourly/monthly/weekday/bucket aggregations
+	- `split_dataset.py` — splits curated CSVs for incremental BI ingestion
+	- `validate_curated.py` — validates essential rules and types
+	- `export_powerbi_dims.py` — generates Date/Hour/Weekday/Distance Bucket dimensions
+- `docs/`
+	- `hourly_trips.csv`, `monthly_revenue.csv`, `expensive_routes.csv`
+	- `nyc_pickup_map.html`, `plotly_histogram.html` (visual placeholders)
+- `data/dim/`
+	- `dim_date.csv`, `dim_hour.csv`, `dim_weekday.csv`, `dim_distance_bucket.csv`
+- `powerbi/`
+	- `ny-yellowcab.pbix` (Power BI report)
+	- `dax_measures.txt` (DAX reference)
+	- `printpowerbi.png` (screenshot used above)
+- Tooling & CI
+	- `.github/workflows/ci.yml`, `.pre-commit-config.yaml`, `.editorconfig`, `Makefile`, `pyproject.toml`, `requirements.txt`, `.gitattributes`
+
+## Reproduce Locally
+
+Requirements
+- Windows, macOS, or Linux
+- Python 3.11+
+
+Setup
+
+```bash
+# 1) Create & activate a virtualenv (example for PowerShell on Windows)
+python -m venv .venv
+. .venv/Scripts/Activate.ps1
+
+# 2) Install dependencies
+pip install -r requirements.txt
+
+# 3) (Optional) Install pre-commit hooks
+pre-commit install
+```
+
+Prepare Data
+- Place your cleaned input CSV at `data/nyc_taxi_clean.csv` (adapt paths in scripts if needed)
+
+Run Pipeline
+
+```bash
+# Curate -> Aggregate -> Validate -> Export BI dimensions
+make curate
+make aggregate
+make validate
+make powerbi-dims
+```
+
+Outputs
+- Curated analytics: `docs/hourly_trips.csv`, `docs/monthly_revenue.csv`, `docs/expensive_routes.csv`
+- BI Dimensions: `data/dim/*.csv`
+- Visuals: `docs/*.html`
+
+## Power BI Report
+
+Open `powerbi/ny-yellowcab.pbix` in Power BI Desktop. The report includes:
+- Trip volume trends by hour/day/month
+- Revenue patterns with calendar context
+- Distance-based analysis via buckets and weekday breakdowns
+
+Model Inputs
+- Fact-like CSVs in `docs/`
+- Dimensions in `data/dim/` (generated by `export_powerbi_dims.py`)
+
+DAX Measures
+- See `powerbi/dax_measures.txt` for examples of totals, averages, and time-intelligence patterns
+
+## Kaggle Notebook
+
+Run the analysis in the cloud via Kaggle for easy sharing and reproducibility.
+- Link: [Open on Kaggle](https://www.kaggle.com/code/pedromusculini/pedromusculini-nyc-taxi)
+- Notes: Kaggle environments may require specific versions for Plotly/Kaleido when exporting images
+
+## CI, Testing, and Quality
+
+- GitHub Actions CI: installs deps, runs validations and tests
+- `pytest` minimal tests included to prevent regressions
+- `pre-commit` hooks: auto-formatting and lint checks before commits
+- `.editorconfig`: consistent formatting across editors
+
+## License & Contributing
+
+- License: MIT (see `LICENSE`)
+- Contributions welcome! See `CONTRIBUTING.md` for guidelines
+
+---
+
+If you want a guided tour or help adapting this pipeline to new mobility datasets, feel free to open an issue or start a discussion.
