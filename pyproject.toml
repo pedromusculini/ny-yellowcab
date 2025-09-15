@@ -1,0 +1,28 @@
+[project]
+name = "ny-yellowcab"
+version = "0.1.0"
+description = "NYC Yellow Taxi analytics with curated pipeline and Power BI"
+requires-python = ">=3.11"
+authors = [{ name = "Pedro Musculini" }]
+dependencies = [
+  "pandas>=2.1",
+  "numpy>=1.26",
+  "folium>=0.16",
+  "plotly>=6.1.1",
+  "kaleido>=0.2.1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.2",
+  "pre-commit>=3.7",
+]
+
+[tool.black]
+line-length = 100
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+addopts = "-q"
